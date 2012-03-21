@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Plugin Validation</title>
+	
+	<link rel="stylesheet" media="screen" href="normalize.css" >
+	<link rel="stylesheet" media="screen" href="css/ui-lightness/jquery-ui-1.8.16.custom.css" >
+	<link rel="stylesheet" media="screen" href="jquery.snippet.css" >
+	
+	<style>
+		h1, h2{
+			text-align:center;
+		}
+		
+		.bordaRounded, form{
+			padding: 1em;
+			line-height: 1.8em;
+			overflow: auto;
+			position: relative;
+			-moz-border-radius: 15px;
+			-webkit-border-radius: 15px;
+			border-radius: 15px;
+			box-shadow: 2px 2px 5px #000;
+			-moz-box-shadow: 2px 2px 5px #000;
+			-webkit-box-shadow: 2px 2px 5px #000;
+			margin:10px;
+			padding:10px; 
+		}
+		
+		#nav{
+			position:fixed; 
+			top:50px; 
+			right:0; 
+			list-style:none; 
+			background:#fff; 
+			border:1px solid #666;
+			-moz-border-radius: 15px;
+			-webkit-border-radius: 15px;
+			border-radius: 15px;
+			box-shadow: 2px 2px 5px #000;
+			-moz-box-shadow: 2px 2px 5px #000;
+			-webkit-box-shadow: 2px 2px 5px #000;
+			margin:0 10px;
+			padding:10px; 
+			z-index:9000;
+			background-color:#eee;
+		}
+		#nav a{
+			display:block;
+			text-decoration:none;
+			color:#666;
+			padding:5px;
+			font-size:90%;
+		}
+		#nav a:hover{
+			background-color:lightblue;
+		}
+		.html, .js, form, .bordaRounded{
+			margin:0 220px;
+		}
+	</style>
+	
+</head>
+<body>
+
+<div class="teste1">ok</div>
+<div class="teste1">outro</div>
+<div class="teste1">mais um</div>
+
+<div class="teste2">ok</div>
+<div class="teste2">outro</div>
+<div class="teste2">mais um</div>
+
+<div id="comeco">
+	<header class="header">  
+		<h1>Validation Plugin</h1>
+	</header>
+	
+	<div class="body">
+		
+		<h2 id="instalacao">Instalação</h2>
+<div class="html">
+<pre>
+&lt;!---
+Insira o js do plugin 
+---&gt;
+&lt;script src="jquery.validation.js"&gt;&lt;/script&gt;
+&lt;!---
+Crie o formulário 
+---&gt;
+&lt;form action="/pagina" method="post" id="myForm"&gt;
+&lt;label&gt;Link:&lt;/label&gt;
+&lt;div id="url"&gt;
+	&lt;input type="url" name="url" required /&gt;
+&lt;/div&gt;
+&lt;input type="submit" value="Enviar" /&gt;
+&lt;/form&gt;
+&lt;!---
+Ao carregar execute o validation 
+---&gt;
+&lt;script&gt;
+$(function(){
+	$("#myForm").validation();
+});
+&lt;/script&gt;
+</pre>
+</div>
+		
+		<h2 id="comandosBasicos">Comandos Basicos no Form</h2>
+		
+<div class="html">
+<pre>
+&lt;!---
+O form deve obrigatoriamente conter action, method [GET,POST,PUT,DELETE] e id. 
+---&gt;
+&lt;form action="/pagina" method="post" id="myForm"&gt;
+&lt;!---
+Required e Equal.
+Validos para todos os elementos (inputs, textarea, select); 
+---&gt;
+&lt;input type="text" name="exemploInput" required/&gt;
+&lt;textarea name="exemploTextarea" required&gt;&lt;/textarea&gt;
+&lt;select name="exemploSelect" required&gt;
+	&lt;option value=""&gt;Exemplo&lt;/option&gt;
+	&lt;option value="1"&gt;Um&lt;/option&gt;
+&lt;/select&gt;
+&lt;input type="password" name="pass" data-equal="repass" /&gt;
+&lt;input type="password" name="repass" /&gt;
+&lt;!---
+MinLength, MaxLength e Pattern
+Validos para inputs e textareas
+---&gt;
+&lt;input type="text" name="exemploPattern" pattern="^[0-9]+$"/&gt;
+&lt;textarea name="exemploLength" minLength="5" maxLength="20"&gt;&lt;/textarea&gt;
+&lt;!---
+CheckboxGroup
+Validos Somente para checkbox
+---&gt;
+&lt;input type="checkbox" name="exemploCheckGroup1" data-required-group="testeGrupo" /&gt;
+&lt;input type="checkbox" name="exemploCheckGroup2" data-required-group="testeGrupo" /&gt;
+&lt;input type="checkbox" name="exemploCheckGroup3" data-required-group="testeGrupo" /&gt;
+&lt;!---
+Min, Max, Date, Datetime, E-mail, Number, Range, Tel, Time e Url
+Validos Somente para inputs
+---&gt;
+&lt;input type="number" name="exemploMin" min="10" /&gt;
+&lt;input type="number" name="exemploMax" max="20" /&gt;
+&lt;input type="date" name="exemplodate" /&gt;
+&lt;input type="datetime" name="exemplodatetime" /&gt;
+&lt;input type="email" name="exemploemail" /&gt;
+&lt;input type="number" name="exemplonumber" /&gt;
+&lt;input type="range" name="exemplorange" step="2" min="0" max="10" /&gt;
+&lt;input type="tel" name="exemplotel" /&gt;
+&lt;input type="time" name="exemplotime" /&gt;
+&lt;input type="url" name="exemplourl" /&gt;
+&lt;!---
+O ideal é que o form tenha um botão de submit
+---&gt;
+&lt;input type="submit" value="Enviar" /&gt;
+&lt;/form&gt;
+</pre>
+</div>
+	<h2 id="ConfiguracoesPlugin">Configurações do Plugin</h2>
+
+<div class="js">
+<pre>
+// Adicionar Linguagem
+$.validation.addLang('en' : {
+	'default'		: 'Field populated incorrectly.',
+	'required'		: 'This field is required.',
+	'min'			: 'Value less than required.',
+	'max'			: 'Maximum exceeded.',
+	'minLength'		: 'Not reached the minimum length.',
+	'maxLength'		: 'Exceeded the character limit.',
+	'checkboxGroup'	: 'Select an item.',
+	'date'			: 'Invalid Date.',
+	'datetime'		: 'Invalid date and time.', 
+	'email'			: 'E-mail is invalid.',
+	'number'		: 'Invalid number.',
+	'range'			: 'Invalid range.',
+	'tel'			: 'Invalid phone.',
+	'time'			: 'Invalid time.',
+	'url'			: 'Invalid url.',
+	'pattern'		: 'Invalid pattern.'
+});
+// Config Minimo
+$("#myForm").validation();
+// Adicionar Mascara
+$("#myForm").validation().addMask("#campo","00-00-00").addMask("#campo2","000-0000-00000");
+// Ou utilizando um objeto com todos os campos
+$("#myForm").validation().addMask({"#campo":"00-00-00","#campo2":"000-0000-00000"});
+// Adicionar validação customizada
+$("#myForm").validation().addCustomValidate(function(){
+	// Sua Lógica aqui
+	// Retornando false o erro será exibido
+	return false; // ou true para passar;
+},"mensagem personalizada");
+// Validar com opções personalizadas
+$("#myForm").validation().validate({
+	'action' : '/pagina',
+	'method' : 'DELETE',
+	'sucess' : function(data, textStatus, jqXHR) {
+		alert('Sucesso');
+	},
+	'error404' : function(action) {
+		alert('erro 404');
+	},
+	'error400' : function(data, textStatus, jqXHR) {
+		alert('erro 400');
+	},
+	'divErrorPosition' : 'top',
+	'showErrorsIn' : 'fields',
+	'buttonSubmit' : '#myButtom',
+	'fileCss' : 'pagina-com-css-de-erros',
+	'lang' : 'ptbr'
+});
+</pre>
+</div>
+	</div>
+	
+	<footer class="footer">
+	
+	</footer>
+</div>
+
+<div id="exemplos">
+	<header class="header">  
+		<h1 id="exemplos">Exemplos</h1>
+	</header>
+	
+	<div class="body">
+		<h2 id="exMinimo">Minimo:</h2>
+
+<div id="configMinimo">
+<form action="" method="get">
+	<table>
+		<tr>
+			<td width="150">
+				<label>Link:</label>
+			</td>
+			<td>
+				<div id="url">
+					<input type="url" name="url" required />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="submit" value="Enviar" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+
+<div class="js">
+<pre>
+$(function(){
+	$("form").validation();
+});
+</pre>
+</div>
+
+<h2 id="exLang">Linguagem:</h2>
+
+<div id="configLang">
+<form action="/pagina" method="get">
+	<table>
+		<tr>
+			<td width="150">
+				<label>Texto:*</label>
+			</td>
+			<td>
+				<div id="exemploText">
+					<input type="text" name="exemploText" required />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="submit" value="Enviar" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+
+<div class="js">
+<pre>
+$(function(){
+	$.validation.addLang('custom' : {
+		'default'		: 'Field populated incorrectly. Custom.',
+		'required'		: 'This field is required. Custom.',
+		'min'			: 'Value less than required. Custom.',
+		'max'			: 'Maximum exceeded. Custom.',
+		'minLength'		: 'Not reached the minimum length. Custom.',
+		'maxLength'		: 'Exceeded the character limit. Custom.',
+		'checkboxGroup'	: 'Select an item. Custom.',
+		'date'			: 'Invalid Date. Custom.',
+		'datetime'		: 'Invalid date and time. Custom.', 
+		'email'			: 'E-mail is invalid. Custom.',
+		'number'		: 'Invalid number. Custom.',
+		'range'			: 'Invalid range. Custom.',
+		'tel'			: 'Invalid phone. Custom.',
+		'time'			: 'Invalid time. Custom.',
+		'url'			: 'Invalid url. Custom.',
+		'pattern'		: 'Invalid pattern. Custom.'
+	});
+	$("#configLang form").validation().validate({"lang":"custom"});
+});
+</pre>
+</div>
+
+<h2 id="exMask">Mascara:</h2>
+
+<div id="configMask">
+<form action="/pagina" method="get">
+	<table>
+		<tr>
+			<td width="150">
+				<label>Mask:*</label>
+			</td>
+			<td>
+				<div id="exemploMask">
+					<input type="text" name="exemploMask" required />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="submit" value="Enviar" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+
+<div class="js">
+<pre>
+$(function(){
+	$("#configMask form").validation().addMask("exemploMask","9999-9999");
+});
+</pre>
+</div>
+
+<h2 id="exValCustomizada">Validação Customizada:</h2>
+
+<div id="configCustomValidate">
+<form action="/pagina" method="get">
+	<table>
+		<tr>
+			<td width="150">
+				<label>Teste 1:*</label>
+			</td>
+			<td>
+				<div id="exemploCustom1">
+					<input type="number" name="exemploCustom1" required />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td width="150">
+				<label>Teste 2:*</label>
+			</td>
+			<td>
+				<div id="exemploCustom1">
+					<input type="number" name="exemploCustom2" required />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td width="150">
+				<label>Teste 3:*</label>
+			</td>
+			<td>
+				<div id="exemploCustom1">
+					<input type="number" name="exemploCustom3" required />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="submit" value="Enviar" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+
+<div class="js">
+<pre>
+$(function(){
+	$("#configCustomValidate form").validation().addCustomValidate(function(){
+		var form = $("#configCustomValidate form"),
+			val1 = parseInt(form.find("[name='exemploCustom1']").val()),
+			val2 = parseInt(form.find("[name='exemploCustom2']").val()),
+			val3 = parseInt(form.find("[name='exemploCustom3']").val());
+		return ((val1 % 3 == 0) &amp;&amp; (val2 % 3 == 0) &amp;&amp; (val3 % 3 == 0)) &amp;&amp; ((val1 + val2 + val3) &lt; 30);
+	},"Os valores devem ser multiplos de 3 e totalizar menos de 30");
+});
+</pre>
+</div>
+
+<h2 id="exComplexo">Validação Complexa:</h2>
+
+<div id="configComplexo">
+	<form action="" method="get" id="myForm1" style="background-color: #d3d5ff;">
+		<h1>Form 1</h1>
+		
+		<input type="submit" value="Enviar" />
+		<table>
+			<tr>
+				<td style="width:150px;">
+					<label>Link:</label>	
+				</td>
+				<td>
+					<div id="url">
+			 			<input type="url" name="url" style="display:block;" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="width:150px;">
+					<label>Comentarios:</label>	
+				</td>
+				<td>
+					<div id="comentarios">
+			 			<textarea name="comentarios" data-count="true"></textarea>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Outro:</label>
+				</td>
+				<td>
+					<div id="outro">
+						 <input type="tel" name="outrotext" />
+					</div>
+				</td>
+			</tr>		
+			<tr>
+				<td>
+					<label>Novo:</label>
+				</td>
+				<td>
+					<div id="novo">
+						 <input type="date" name="novo" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Senha:</label>
+				</td>
+				<td>
+					<div id="pass">
+						<input type="password" name="pass" data-equal="repass"/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Re-Senha:</label>
+				</td>
+				<td>
+					<div id="repass">
+						<input type="password" name="repass" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Data Completa:</label>
+				</td>
+				<td>
+					<div id="datetime">
+						 <input type="datetime" name="datetime" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Tempo:</label>
+				</td>
+				<td>
+					<div id="time">
+						 <input type="time" name="time" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Pattern:</label>
+				</td>
+				<td>
+					<div id="pattern">
+						 <input type="text" name="pattern" pattern="^[0-9]+$" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>telefone:</label>
+				</td>
+				<td>
+					<div id="tel">
+						 <input type="tel" name="tel" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>String:</label>
+				</td>
+				<td>
+					<div id="string">
+						 <input type="text" name="string" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Numero:</label>
+				</td>
+				<td>
+					<div id="integer">
+						<input type="number" name="integer" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Decimal:</label>
+				</td>
+				<td>
+					<div id="decimal">
+						<input type="number" name="decimal" step="0.01" required />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>E-mail:</label>
+				</td>
+				<td>
+					<div id="email">
+						 <input type="email" name="email"
+							data-message="E-mail inválido" placeholder="email@dominio.com" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Min:</label>
+				</td>
+				<td>
+					<div id="min">
+						<input type="number" name="min" min="2" data-message="Minimo inválido" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Max:</label>
+				</td>
+				<td>
+					<div id="max">
+						<input type="number" name="max" max="10" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>MinLength:</label>
+				</td>
+				<td>
+					<div id="minLength">
+						<input type="text" name="minLength" minLength="2" data-message="Minimo inválido" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>MaxLength:</label>
+				</td>
+				<td>
+					<div id="maxLength">
+						<input type="text" name="maxLength" maxLength="10" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Range:</label>
+				</td>
+				<td>
+					<div id="range">
+						<input type="range" name="range" min="0" max="12" step="4" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Date:</label>
+				</td>
+				<td>
+					<div id="date">
+						<input type="date" name="date" placeholder="dia/mes/ano" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Pesquisa:</label>
+				</td>
+				<td>
+					<div id="search">
+						 <input type="search" name="search" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Cor:</label>
+				</td>
+				<td>
+					<div id="color">
+						 <input type="color" name="color" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Select:</label>
+				</td>
+				<td>
+					<div id="select">
+						<select name="select">
+							<option value="0">Default</option>
+							<option value="1">Um</option>
+							<option value="2">Dois</option>
+							<option value="3">Tres</option>
+							<option value="4">Quatro</option>
+							<option value="5">Cinco</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Radio:</label>
+				</td>
+				<td>
+					<div id="radio">
+						 <input type="radio" name="color" value="1" /> <input
+							type="radio" name="color" value="2" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Check:</label>
+				</td>
+				<td>
+					<div id="check">
+						 <input type="checkbox" name="check[0]" value="1"
+							data-required-group="ckT" /> <input type="checkbox" name="check[1]"
+							value="2" data-required-group="ckT" /> <input type="checkbox"
+							name="check[2]" value="3" data-required-group="ckT" /> <input
+							type="checkbox" name="check[3]" value="4" data-required-group="ckT" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Check1:</label>
+				</td>
+				<td>
+					<div id="check1">
+						 <input type="checkbox" name="check-1" value="3"
+							data-required-group="ckTTT" /> <input type="checkbox" name="check-2"
+							value="4" data-required-group="ckTTT" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>AutoComplete:</label>					
+				</td>
+				<td>
+					<div id="complete">
+						 <input type="text" name="autocomplete" />
+					</div>					
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Enviar" />
+		<br/>
+	</form>
+</div>
+
+<div class="js">
+<pre>
+$(function(){
+	$("#configComplexo form").validation();
+});
+</pre>
+</div>
+	</div>
+</div>
+
+<div id="exemplos">
+	<header class="header">  
+		<h1 id="creditos">Creditos</h1>
+	</header>
+	
+	<div class="body">
+		<div class="bordaRounded">
+		
+			<p>Guilherme Mangabeira Gregio |
+			<a href="mailto:guilherme.gregio@dlbca.com.br">guilherme.gregio@dlbca.com.br</a> |
+			<a href="http://www.gregio.net">gregio.net</a>
+			</p>
+			
+			<p>Luiz Estevan Barros
+			<a href="mailto:luiz.barros@dlbca.com.br">luiz.barros@dlbca.com.br</a> |
+			<a href="http://gearsofdev.blogspot.com">gearsofdev.blogspot.com</a>
+			</p>
+
+		</div>
+	</div>
+</div>
+	
+<p style="margin:50px 0; text-align:center;">&copy; 2012 - Todos os direitos reservados.</p>
+
+	 <ul id="nav">
+	 	<li>Menu</li>
+	 	<li><a href="#instalacao">Instalação</a></li>
+	 	<li><a href="#comandosBasicos">Comandos Basicos</a></li>
+	 	<li><a href="#ConfiguracoesPlugin">Configurações do Plugin</a></li>
+	 	<li><a href="#exemplos">Exemplos</a></li>
+	 	<li><a href="#exMinimo">&diams; Minimo</a></li>
+	 	<li><a href="#exLang">&diams; Linguagem</a></li>
+	 	<li><a href="#exMask">&diams; Mascara</a></li>
+	 	<li><a href="#exValCustomizada">&diams; Validação Customizada</a></li>
+	 	<li><a href="#exComplexo">&diams; Complexo</a></li>
+	 	
+	 	<li><a href="#creditos">Creditos</a></li>
+	 </ul>
+	 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	<script src="jquery.snippet.js"></script>
+	<script src="jquery.maskedinput-1.3.js"></script>
+	<script src="jquery.selectors.js"></script>
+	<script src="jquery.arrays.js"></script>
+	<script src="jquery.validation.js"></script>
+	
+	<script>
+		$(function(){
+			
+			var teste1 = $('.teste1').guiTeste({"novo":666});
+			var teste2 = $('.teste2').guiTeste({"nossa":777});
+			teste1.data("setup").pri = 5;
+			teste1.ttt({"guilherme":25});
+			
+			$(".js pre").snippet("javascript",{style:"ide-eclipse",transparent:false,showNum:true});
+			$(".html pre").snippet("html", {style:"ide-eclipse",transparent:false,showNum:false});
+			$("#configMinimo form").validation();
+			
+			$.validation.addLang({'custom' : {
+				'default'		: 'Field populated incorrectly. Custom.',
+				'required'		: 'This field is required. Custom.',
+				'min'			: 'Value less than required. Custom.',
+				'max'			: 'Maximum exceeded. Custom.',
+				'minLength'		: 'Not reached the minimum length. Custom.',
+				'maxLength'		: 'Exceeded the character limit. Custom.',
+				'checkboxGroup'	: 'Select an item. Custom.',
+				'date'			: 'Invalid Date. Custom.',
+				'datetime'		: 'Invalid date and time. Custom.', 
+				'email'			: 'E-mail is invalid. Custom.',
+				'number'		: 'Invalid number. Custom.',
+				'range'			: 'Invalid range. Custom.',
+				'tel'			: 'Invalid phone. Custom.',
+				'time'			: 'Invalid time. Custom.',
+				'url'			: 'Invalid url. Custom.',
+				'pattern'		: 'Invalid pattern. Custom.'
+			}});
+			$("#configLang form").validation().validate({"lang":"custom"});
+			
+			$("#configMask form").validation().addMask("exemploMask","9999-9999");
+			
+			$("#configCustomValidate form").validation().addCustomValidate(function(){
+				var form = $("#configCustomValidate form"),
+					val1 = parseInt(form.find("[name='exemploCustom1']").val()),
+					val2 = parseInt(form.find("[name='exemploCustom2']").val()),
+					val3 = parseInt(form.find("[name='exemploCustom3']").val());
+				return ((val1 % 3 == 0) && (val2 % 3 == 0) && (val3 % 3 == 0)) && ((val1 + val2 + val3) < 30);
+			},"Os valores devem ser multiplos de 3 e totalizar menos de 30");
+			
+			$("#configComplexo form").validation();
+			
+			$input = $("#configComplexo form").find("[name='url']");
+			$erro = $("<div/>",{text:"teste controle",style:"height:100px; background:red; position:absolute; top:"+(($input.position().top))+"px; left:"+($input.position().left+$input.width()+10)+"px"});
+			
+			//$erro.insertAfter($input);
+			
+			//console.info();
+			//.insertAfter(
+		});
+	</script>
+</body>
+</html>

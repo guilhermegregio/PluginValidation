@@ -1,0 +1,10 @@
+K 13
+svn:mime-type
+V 10
+text/plain
+K 13
+svn:mergeinfo
+V 144
+/fourData/branches/ObligationFlow/src/main/webapp/static/validation/jquery.validation.js:565-600
+/fourData/branches/validation namespace:360-363
+END
