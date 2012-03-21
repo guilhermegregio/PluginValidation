@@ -10,48 +10,71 @@
 // that are not closed properly.
 ;(function ( $, window, document, undefined ) {
 
-    var pluginName = 'defaultPluginName',
-        defaults = {
-            propertyName: "value"
-        };
-
-    function Plugin( element, options ) {
-    	console.count('construct');
-        this.element = element;
-
-        this.options = $.extend( {}, defaults, options) ;
-        this._defaults = defaults;
-        this._name = pluginName;
-
-        this.init();
-        
-        return this;
-    };
-
-    Plugin.prototype.init = function () {
-    	console.count('init');
-    };
-    
-    Plugin.prototype.funcaoNova = function () {
-    	funcaoPrivate();
-    	console.info(this.element);
-    	console.count('funcaoNova');
-    };
-    
-    var funcaoPrivate = function () {
-    	console.count('Private', this);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-    	
-    	this.each(function(){
-    		var plugin = $.data(this, 'plugin_' + pluginName);
-        	if(!plugin){
-        		plugin = new Plugin( this, options );
-        	}
-        	
-    	});
-    	
-    };
-
+	var pluginName = 'myPlugin',
+		pluginVersion = 0.1,
+		
+		// Funções Private
+		nroElements = function($el){
+			var nroItens = $el.length;
+			// se nada for selecionado, retornar nada.
+			if (!nroItens) {
+				if (options && options.debug && window.console) {
+					console.warn( "nothing selected, can't validate, returning nothing" );
+				}
+				return;
+			}
+			return nroItens;
+		};
+	
+	$.fn[pluginName] = function(options){
+		
+		// Se existir mais de um elemento efetua o loop
+		if(nroElements(this) > 1){
+			this.each(function(){
+				this[pluginName](options);
+			});
+			return;
+		}
+		
+		// Verifica se o plugin ja foi criado para este elemento.
+		var validator = $.data(this[0], pluginName);
+		if ( validator ) {
+			return validator;
+		}
+		
+		// Inicia o plugin.
+		validator = new $[pluginName]( options, this );
+		
+		return validator;
+	};
+	
+	$[pluginName] = function(options, element) {
+		
+		// Se existir mais de um elemento efetua o loop
+		if(nroElements(element) > 1){
+			element.each(function(){
+				$(this)[pluginName](options);
+			});
+			return;
+		}
+		
+		this.options = options;
+		this.$el = element;
+		this.uid = Math.random();
+		
+		$.data(this.$el[0], pluginName, this);
+		
+		$[pluginName].version();
+		
+		return this;
+	};
+	
+	$[pluginName].prototype.gui = function(){
+		console.info('gui');		
+	};
+	
+	$[pluginName].version = function() {
+		console.count('Version-' + pluginVersion);
+	};
+	
 })( jQuery, window, document );
